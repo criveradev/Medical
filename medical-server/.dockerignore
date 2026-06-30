@@ -1,0 +1,9 @@
+node_modules
+logs
+uploads
+.env
+.env.development
+.env.production
+.git
+.gitignore
+README.md

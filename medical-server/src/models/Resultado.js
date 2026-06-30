@@ -1,0 +1,27 @@
+// ═══════════════════════════════════════════════════════════════
+// src/models/Resultado.js
+// ═══════════════════════════════════════════════════════════════
+
+const mongoose = require('mongoose');
+
+const resultadoSchema = new mongoose.Schema({
+  pacienteId:   { type: mongoose.Schema.Types.ObjectId, ref: 'Paciente', required: true },
+  citaId:       { type: mongoose.Schema.Types.ObjectId, ref: 'Cita', required: true },
+  doctorId:     { type: mongoose.Schema.Types.ObjectId, ref: 'Doctor', required: true },
+  tipo: {
+    type:     String,
+    enum:     ['examen_sangre', 'radiografia', 'ecografia', 'electrocardiograma', 'otro'],
+    required: true
+  },
+  nombre:       { type: String, required: true, trim: true },
+  descripcion:  { type: String, trim: true },
+  archivo:      { type: String, trim: true }, // URL del archivo subido con Multer
+  observaciones:{ type: String, trim: true },
+  fecha:        { type: Date, default: Date.now }
+}, { timestamps: true, collection: 'resultados' });
+
+// ── Índices ───────────────────────────────────────────────────
+resultadoSchema.index({ pacienteId: 1, createdAt: -1 });
+resultadoSchema.index({ citaId: 1 });
+
+module.exports = mongoose.model('Resultado', resultadoSchema);

@@ -1,0 +1,71 @@
+# ═══════════════════════════════════════════════════════════════
+# docker-compose.yml — Orquestación de servicios
+# ═══════════════════════════════════════════════════════════════
+
+services:
+  # ── Backend Node.js ──────────────────────────────────────────
+  backend:
+    build: .
+    container_name: medical-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Topes de rate limiting por 15 min. Holgados para desarrollo;
+      # bájalos (o quita estas líneas) en una producción real.
+      - LOGIN_RATE_MAX=50
+      - RATE_LIMIT_MAX=5000
+      # Dentro de Docker siempre se usa el contenedor 'mongo' (ignora el .env,
+      # que apunta a localhost para tu desarrollo local). Para usar Atlas,
+      # cambia esta línea por tu cadena mongodb+srv://...
+      - MONGO_URI=mongodb://mongo:27017/medical_db
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - JWT_EXPIRES=${JWT_EXPIRES}
+      - CLIENT_URL=${CLIENT_URL}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - API_URL=${API_URL}
+      - SENTRY_DSN=${SENTRY_DSN}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - uploads:/app/uploads
+      - logs:/app/logs
+    depends_on:
+      - redis
+      - mongo
+
+  # ── MongoDB ───────────────────────────────────────────────────
+  mongo:
+    image: mongo:7
+    container_name: medical-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # ── Redis ─────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: medical-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+# ── Volúmenes persistentes ────────────────────────────────────
+volumes:
+  uploads:
+  logs:
+  redis_data:
+  mongo_data:

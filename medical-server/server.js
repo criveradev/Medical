@@ -1,0 +1,72 @@
+// ═══════════════════════════════════════════════════════════════
+// server.js — Punto de entrada del servidor
+// Sistema de citas médicas — MEAN Stack
+//
+// Orden de arranque:
+//   1. Cargar .env
+//   2. Validar variables de entorno requeridas
+//   3. Crear servidor HTTP sobre Express
+//   4. Montar Socket.io para notificaciones en tiempo real
+//   5. Conectar MongoDB
+//   6. Iniciar recordatorios automáticos de citas
+//   7. Escuchar en el puerto configurado
+// ═══════════════════════════════════════════════════════════════
+
+// Las variables de entorno deben cargarse antes de cualquier require
+// que las necesite (cloudinary, sentry, mongoose, etc.)
+require('dotenv').config();
+
+const http               = require('http');
+const { Server }         = require('socket.io');
+const mongoose           = require('mongoose');
+const app                = require('./src/app');
+const logger             = require('./src/config/logger');
+const iniciarRecordatorios = require('./src/services/recordatorios.service');
+const notificaciones       = require('./src/services/notificaciones.service');
+const validarEnv           = require('./src/config/env');
+const { origenPermitido }  = require('./src/config/cors');
+
+// Detener el proceso si faltan variables críticas (.env incompleto)
+validarEnv();
+
+// ── Servidor HTTP ─────────────────────────────────────────────
+// Se crea sobre Express para poder compartirlo con Socket.io
+const httpServer = http.createServer(app);
+
+// ── Socket.io ─────────────────────────────────────────────────
+// Monta WebSocket sobre el mismo puerto que la API REST
+const io = new Server(httpServer, {
+  cors: {
+    // Misma lógica de orígenes que la API REST (ver src/config/cors.js)
+    origin: (origin, callback) => {
+      if (!origin || origenPermitido(origin)) return callback(null, true);
+      callback(new Error(`Origen no permitido por CORS (socket): ${origin}`));
+    },
+    methods:     ['GET', 'POST'],
+    credentials: true
+  }
+});
+
+// Pasar la instancia de io al servicio de notificaciones
+// para que los controladores puedan emitir eventos
+notificaciones.inicializar(io);
+
+// ── MongoDB ───────────────────────────────────────────────────
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    logger.info('MongoDB conectado');
+
+    // Cron jobs de recordatorios (se inician tras conectar a BD)
+    iniciarRecordatorios();
+
+    const PORT = process.env.PORT || 3000;
+    httpServer.listen(PORT, () => {
+      logger.info(`Servidor en http://localhost:${PORT}`);
+      logger.info(`Documentación en http://localhost:${PORT}/api/docs`);
+      logger.info(`Socket.io activo en ws://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    logger.error(`Error MongoDB: ${err.message}`);
+    process.exit(1);
+  });
