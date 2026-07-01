@@ -1,21 +1,54 @@
 <div align="center">
 
-# 🏥 Medical API
+# 🏥 Medical · API
 
-**Backend REST para la gestión integral de un centro médico**
+**Backend REST del sistema de citas médicas — `medical-server`**
 
-Citas, historial clínico, recetas, resultados, pagos y reportes — con autenticación JWT, control de acceso por roles (RBAC) y autorización a nivel de objeto.
+Citas, historial clínico, recetas, resultados, pagos y reportes, con autenticación
+JWT, control de acceso por rol (RBAC) y autorización a nivel de objeto.
 
-[![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js&logoColor=white)](https://nodejs.org)
-[![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)](https://expressjs.com)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com)
-[![Redis](https://img.shields.io/badge/Redis-cache-DC382D?logo=redis&logoColor=white)](https://redis.io)
-[![Socket.io](https://img.shields.io/badge/Socket.io-realtime-010101?logo=socket.io&logoColor=white)](https://socket.io)
-[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI%203-85EA2D?logo=swagger&logoColor=black)](#-referencia-de-endpoints)
-[![Tests](https://img.shields.io/badge/tests-170%20passing-3DDC84?logo=jest&logoColor=white)](#-tests)
-[![Docker](https://img.shields.io/badge/Docker-compose-2496ED?logo=docker&logoColor=white)](#-docker)
+[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-5.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
+[![Socket.io](https://img.shields.io/badge/Socket.io-Realtime-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io/)
+[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI%203-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](#-referencia-de-endpoints)
+[![Jest](https://img.shields.io/badge/Tests-170%20passing-C21325?style=for-the-badge&logo=jest&logoColor=white)](#-tests)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](#-docker)
+
+<br/>
+
+📡 **[API](https://api.medical.criveradev.cl/health)** &nbsp;·&nbsp;
+📖 **[Documentación Swagger](https://api.medical.criveradev.cl/api/docs/)** &nbsp;·&nbsp;
+📦 **[README del monorepo](../README.md)**
 
 </div>
+
+---
+
+## 📋 Tabla de contenidos
+
+- [Características](#-características)
+- [Stack tecnológico](#-stack-tecnológico)
+- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Inicio rápido](#-inicio-rápido)
+- [Docker](#-docker)
+- [Variables de entorno](#-variables-de-entorno)
+- [Modelo de datos](#-modelo-de-datos)
+- [Autenticación, roles y permisos](#-autenticación-roles-y-permisos)
+- [Referencia de endpoints](#-referencia-de-endpoints)
+- [Seguridad](#-seguridad)
+- [Tiempo real (Socket.io)](#-tiempo-real-socketio)
+- [Caché Redis](#-caché-redis)
+- [Archivos (Cloudinary)](#-archivos-cloudinary)
+- [Reportes y exportación](#-reportes-y-exportación)
+- [Tareas programadas (cron)](#-tareas-programadas-cron)
+- [Notificaciones por correo](#-notificaciones-por-correo)
+- [Manejo de errores y logs](#-manejo-de-errores-y-logs)
+- [Tests](#-tests)
+- [Scripts](#-scripts)
+- [Hardening de seguridad reciente](#-hardening-de-seguridad-reciente)
+- [Funcionalidades recientes](#-funcionalidades-recientes)
 
 ---
 
@@ -33,32 +66,7 @@ Citas, historial clínico, recetas, resultados, pagos y reportes — con autenti
 
 ---
 
-## 📑 Tabla de contenidos
-
-1. [Stack tecnológico](#-stack-tecnológico)
-2. [Estructura del proyecto](#-estructura-del-proyecto)
-3. [Inicio rápido](#-inicio-rápido)
-4. [Docker](#-docker)
-5. [Variables de entorno](#-variables-de-entorno)
-6. [Modelo de datos](#-modelo-de-datos)
-7. [Autenticación, roles y permisos](#-autenticación-roles-y-permisos)
-8. [Referencia de endpoints](#-referencia-de-endpoints)
-9. [Seguridad](#-seguridad)
-10. [Tiempo real (Socket.io)](#-tiempo-real-socketio)
-11. [Caché Redis](#-caché-redis)
-12. [Archivos (Cloudinary)](#-archivos-cloudinary)
-13. [Reportes y exportación](#-reportes-y-exportación)
-14. [Tareas programadas (cron)](#-tareas-programadas-cron)
-15. [Notificaciones por correo](#-notificaciones-por-correo)
-16. [Manejo de errores y logs](#-manejo-de-errores-y-logs)
-17. [Tests](#-tests)
-18. [Scripts](#-scripts)
-19. [Hardening de seguridad reciente](#-hardening-de-seguridad-reciente)
-20. [Funcionalidades recientes](#-funcionalidades-recientes)
-
----
-
-## 🛠 Stack Tecnológico
+## 🛠 Stack tecnológico
 
 | Capa | Tecnología |
 |---|---|
@@ -78,7 +86,7 @@ Citas, historial clínico, recetas, resultados, pagos y reportes — con autenti
 
 ---
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura del proyecto
 
 ```
 medical-server/
@@ -122,7 +130,7 @@ medical-server/
 
 ---
 
-## 🚀 Inicio Rápido
+## 🚀 Inicio rápido
 
 ### Requisitos
 
@@ -194,7 +202,7 @@ docker compose down -v   # eliminar también los volúmenes (borra datos)
 
 ---
 
-## 🌐 Variables de Entorno
+## 🌐 Variables de entorno
 
 Al arrancar, `src/config/env.js` valida que existan **todas** las variables requeridas; si falta alguna, el proceso termina con código de error.
 
@@ -250,7 +258,7 @@ SENTRY_DSN=https://...
 
 ---
 
-## 🗂 Modelo de Datos
+## 🗂 Modelo de datos
 
 Diez entidades. Las referencias se resuelven con `populate` de Mongoose.
 
@@ -286,7 +294,7 @@ User ──1 Paciente                      │
 
 ---
 
-## 🔐 Autenticación, Roles y Permisos
+## 🔐 Autenticación, roles y permisos
 
 ### Doble token JWT
 
@@ -325,7 +333,7 @@ Cada ruta protegida pasa por `authenticate` (verifica el JWT y carga `req.user`/
 
 ---
 
-## 📡 Referencia de Endpoints
+## 📡 Referencia de endpoints
 
 Base URL: `http://localhost:3000`. Todas las rutas (salvo `login` y `refresh`) requieren `Authorization: Bearer <token>`. La columna **Permiso** indica `modulo:accion` exigido.
 
@@ -466,7 +474,7 @@ Defensa en capas configurada en `src/app.js`:
 
 ---
 
-## ⚡ Tiempo Real (Socket.io)
+## ⚡ Tiempo real (Socket.io)
 
 El cliente se une a salas por rol o por identificador y recibe eventos en vivo.
 
@@ -515,20 +523,20 @@ Al eliminar un resultado, el archivo se borra automáticamente de Cloudinary.
 
 ---
 
-## 📊 Reportes y Exportación
+## 📊 Reportes y exportación
 
 - **Reporte de doctor** (`/api/reportes/doctor/:id`): atenciones completadas, pacientes únicos y desglose por estado en un rango de fechas (`desde`/`hasta`), vía agregaciones de MongoDB. Exportable a **PDF** (pdfkit) y **Excel** (exceljs).
 - **Reporte de admin** (`/api/reportes/admin`): métricas generales del sistema en un rango de fechas.
 
 ---
 
-## ⏰ Tareas Programadas (cron)
+## ⏰ Tareas programadas (cron)
 
 `src/services/recordatorios.service.js` usa `node-cron`: todos los días a las **09:00** busca las citas del día siguiente en estado `pendiente`/`confirmada` y envía un email de recordatorio al paciente.
 
 ---
 
-## 📧 Notificaciones por Correo
+## 📧 Notificaciones por correo
 
 `src/services/email.service.js` (Nodemailer + SMTP) envía correos automáticos al paciente. Los envíos son tolerantes a fallos: si el SMTP falla, se registra en logs sin interrumpir la operación.
 
@@ -546,7 +554,7 @@ Al eliminar un resultado, el archivo se borra automáticamente de Cloudinary.
 
 ---
 
-## 🧯 Manejo de Errores y Logs
+## 🧯 Manejo de errores y logs
 
 - **Errores centralizados** (`middleware/errores.js`): traduce errores de Mongoose (`ValidationError`, `CastError`, duplicado `11000`), JWT (inválido/expirado) y CORS a respuestas JSON con el código HTTP correcto, y los reporta a Sentry.
 - **Logs** con Winston: `logs/error.log` (solo errores), `logs/combined.log` (todo) y consola con colores. Las peticiones HTTP se registran con Morgan integrado a Winston.
@@ -580,7 +588,7 @@ npm run seed:admin    # Seed del admin
 
 ---
 
-## 🔒 Hardening de Seguridad Reciente
+## 🔒 Hardening de seguridad reciente
 
 Mejoras aplicadas tras una auditoría del backend:
 
@@ -595,7 +603,7 @@ Mejoras aplicadas tras una auditoría del backend:
 
 ---
 
-## 🆕 Funcionalidades Recientes
+## 🆕 Funcionalidades recientes
 
 - **Foto de perfil por usuario** — campo `foto` en `User` y endpoint `PUT /api/auth/perfil/foto` (Cloudinary, cualquier rol).
 - **Endpoints "míos"** — `GET /api/pacientes/mi-ficha` y `GET /api/doctores/mi-perfil` para que paciente y doctor obtengan sus propios datos sin permisos de módulo.
@@ -607,7 +615,7 @@ Mejoras aplicadas tras una auditoría del backend:
 
 ---
 
-## 🗺️ Flujo de una Cita (end-to-end)
+## 🗺️ Flujo de una cita (end-to-end)
 
 ```
 Crear Departamento → Crear Especialidad → Crear Usuario Doctor → Crear Doctor
@@ -620,8 +628,8 @@ Crear Departamento → Crear Especialidad → Crear Usuario Doctor → Crear Doc
 
 <div align="center">
 
-**Medical API** · parte del monorepo **Medical** (backend `medical-server` + frontend `medical-client`)
+**Medical · API** — parte del monorepo **[Medical](../README.md)** · Licencia MIT
 
-Documentación interactiva siempre disponible en `/api/docs` · Licencia MIT
+Documentación interactiva siempre disponible en `/api/docs`
 
 </div>

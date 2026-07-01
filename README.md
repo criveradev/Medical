@@ -21,9 +21,9 @@ exámenes, pagos con comprobante y notificaciones en tiempo real.
 
 <br/>
 
-🔗 **[Ver demo en vivo](https://medical.criveradev.com/)** &nbsp;·&nbsp;
-📡 **[API](https://api.medical.criveradev.com/health)** &nbsp;·&nbsp;
-📖 **[Documentación Swagger](https://api.medical.criveradev.com/api/docs/)** &nbsp;·&nbsp;
+🔗 **[Ver demo en vivo](https://medical.criveradev.cl/)** &nbsp;·&nbsp;
+📡 **[API](https://api.medical.criveradev.cl/health)** &nbsp;·&nbsp;
+📖 **[Documentación Swagger](https://api.medical.criveradev.cl/api/docs/)** &nbsp;·&nbsp;
 🐛 **[Reportar bug](https://github.com/criveradev/Medical/issues)**
 
 <br/>
@@ -174,7 +174,7 @@ El repositorio es un **monorepo** con dos paquetes: **`medical-server`** (la API
 │                     │  HTTP   │                      │
 │  Frontend (React)   │────────▶│   Backend (Express)  │
 │  medical.criveradev │◀────────│ api.medical.crivera  │
-│        .com         │  JSON   │      dev.com         │
+│         .cl         │  JSON   │      dev.cl          │
 │                     │◀═══════▶│ WebSocket (Socket.io)│
 └─────────────────────┘  WS     └──────────┬───────────┘
                                            │
@@ -186,7 +186,7 @@ El repositorio es un **monorepo** con dos paquetes: **`medical-server`** (la API
             └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘
 ```
 
-> Ambos dominios (`medical.criveradev.com` y `api.medical.criveradev.com`) son
+> Ambos dominios (`medical.criveradev.cl` y `api.medical.criveradev.cl`) son
 > subdominios propios gestionados en **Cloudflare DNS**, que apuntan respectivamente
 > a Vercel y Render mediante registros CNAME.
 
@@ -400,7 +400,7 @@ SENTRY_DSN=tu_dsn_de_sentry
 
 ## 🔌 Endpoints de la API
 
-URL base en producción: `https://api.medical.criveradev.com/api` · Documentación interactiva: `/api/docs`
+URL base en producción: `https://api.medical.criveradev.cl/api` · Documentación interactiva: `/api/docs`
 
 > En desarrollo local: `http://localhost:3000/api`
 
@@ -547,8 +547,8 @@ gestionado en Cloudflare:
 
 | Pieza | Servicio | Notas |
 |-------|----------|-------|
-| Frontend | **Vercel** | sitio estático (Vite) · `medical.criveradev.com` |
-| Backend / API | **Render** | Web Service Node · `api.medical.criveradev.com` |
+| Frontend | **Vercel** | sitio estático (Vite) · `medical.criveradev.cl` |
+| Backend / API | **Render** | Web Service Node · `api.medical.criveradev.cl` |
 | DNS / Dominio | **Cloudflare** | registros CNAME hacia Vercel y Render |
 | Base de datos | **MongoDB Atlas** | clúster M0 |
 | Caché | **Upstash** (Redis) | vía `REDIS_URL` (TLS) |
@@ -592,14 +592,20 @@ Crea un **Web Service** en [render.com](https://render.com) apuntando al repo:
 | Start Command | `npm start` |
 
 Agrega las variables de entorno (ver [Variables de entorno](#-variables-de-entorno)),
-con `MONGO_URI` de Atlas y `CLIENT_URL` = `https://medical.criveradev.com` (paso 4 y 5).
+con `MONGO_URI` de Atlas y `CLIENT_URL` = `https://medical.criveradev.cl` (paso 4 y 5).
 `SENTRY_DSN` y `REDIS_*` son opcionales. Tras el primer deploy, **siembra los datos**
-desde la pestaña *Shell* de Render:
+(roles y admin). El plan gratuito de Render no incluye *Shell*, así que usa una de
+estas dos vías:
 
-```bash
-npm run seed:roles
-npm run seed:admin
-```
+- **Local:** desde tu máquina, apuntando a la base de Atlas de producción:
+  ```bash
+  cd medical-server
+  MONGO_URI="<tu cadena de Atlas>" npm run seed:roles
+  MONGO_URI="<tu cadena de Atlas>" npm run seed:admin
+  ```
+- **Desde el propio Render:** cambia temporalmente el *Start Command* a
+  `npm run seed:roles && npm run seed:admin && npm start`, deja que redespliegue
+  una vez, y luego devuélvelo a `npm start`. Los seeds son idempotentes.
 
 ### 4. Frontend — Vercel
 
@@ -613,21 +619,21 @@ Importa el repo en [vercel.com](https://vercel.com):
 | Output Directory | `dist` |
 
 Agrega la variable de entorno `VITE_API_URL` con la URL pública del backend
-(sin barra final), por ejemplo `https://api.medical.criveradev.com`.
+(sin barra final), por ejemplo `https://api.medical.criveradev.cl`.
 El `vercel.json` incluido se encarga del fallback de rutas de React Router.
 
 ### 5. Dominio propio — Cloudflare
 
 El proyecto usa subdominios propios en vez de las URLs `.vercel.app` / `.onrender.com`:
 
-1. En **Vercel** → proyecto → Settings → Domains → agrega `medical.criveradev.com`.
+1. En **Vercel** → proyecto → Settings → Domains → agrega `medical.criveradev.cl`.
    Si tu zona DNS ya está en Cloudflare, Vercel puede autorizar y crear el registro
    CNAME automáticamente (integración oficial); si no, agrégalo a mano:
    ```
    CNAME   medical   cname.vercel-dns.com   (Proxy: Solo DNS / DNS only)
    ```
 2. En **Render** → servicio backend → Settings → Custom Domains → agrega
-   `api.medical.criveradev.com` y copia el valor CNAME que entrega Render. Agrégalo
+   `api.medical.criveradev.cl` y copia el valor CNAME que entrega Render. Agrégalo
    en Cloudflare:
    ```
    CNAME   api.medical   <valor entregado por Render>   (Proxy: Solo DNS / DNS only)
@@ -641,11 +647,11 @@ El proyecto usa subdominios propios en vez de las URLs `.vercel.app` / `.onrende
 ### 6. Conectar ambos
 
 En Render, asegúrate de que `CLIENT_URL` quede exactamente como
-`https://medical.criveradev.com` (con `https://`, sin slash final) → esto resuelve
+`https://medical.criveradev.cl` (con `https://`, sin slash final) → esto resuelve
 el CORS tanto de Express como de Socket.io para el nuevo dominio.
 
 > ⚠️ **Error común:** si `CLIENT_URL` queda sin el prefijo `https://` (por ejemplo
-> `medical.criveradev.com` a secas), el backend rechaza el origen con un error
+> `medical.criveradev.cl` a secas), el backend rechaza el origen con un error
 > `403` / *CORS no exitoso*, porque la comparación de origen es por texto exacto.
 
 ### 7. Caché — Redis (Upstash)

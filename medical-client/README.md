@@ -1,11 +1,11 @@
 <div align="center">
 
-# 🏥 Medical — Frontend (`medical-client`)
+# 🏥 Medical · Frontend
 
-**Interfaz web del sistema de citas médicas Medical**
+**Interfaz web del sistema de citas médicas — `medical-client`**
 
 Web pública de la clínica y portal autenticado por rol (administración, recepción,
-doctor y paciente). Construida con **React + Vite + Tailwind CSS v4** y consume el
+doctor y paciente). Construida con **React + Vite + Tailwind CSS v4**, consume el
 backend `medical-server`.
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
@@ -13,10 +13,12 @@ backend `medical-server`.
 [![Tailwind](https://img.shields.io/badge/Tailwind-4.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Router](https://img.shields.io/badge/React_Router-6-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)](https://reactrouter.com/)
 
-</div>
+<br/>
 
-> 📖 Documentación general del proyecto (arquitectura completa, API, despliegue) en el
-> [README raíz](../README.md).
+🔗 **[Demo en vivo](https://medical.criveradev.cl/)** &nbsp;·&nbsp;
+📦 **[README del monorepo](../README.md)**
+
+</div>
 
 ---
 
@@ -280,3 +282,13 @@ Usa estas escalas con las clases utilitarias de Tailwind, p. ej. `bg-brand-600`,
 - Todo el código está comentado con **JSDoc** (componentes, hooks, contextos y libs).
 - No se usan librerías de estado externas: la sesión y las notificaciones viven en
   React Context; los datos de cada vista se cargan con `useFetch`.
+
+---
+
+<div align="center">
+
+**Medical · Frontend** — parte del monorepo **[Medical](../README.md)** · Licencia MIT
+
+Demo en vivo en [medical.criveradev.cl](https://medical.criveradev.cl/)
+
+</div>
