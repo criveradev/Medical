@@ -3,6 +3,7 @@
 # 🏥 Medical
 
 **Sistema de gestión de citas médicas**
+<br/>
 Aplicacion web para agendar citas medicas en línea, portal por rol
 (administración, recepción, doctor y paciente), historial clínico, resultados de
 exámenes, pagos con comprobante y notificaciones en tiempo real.
