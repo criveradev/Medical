@@ -593,7 +593,9 @@ Crea un **Web Service** en [render.com](https://render.com) apuntando al repo:
 
 Agrega las variables de entorno (ver [Variables de entorno](#-variables-de-entorno)),
 con `MONGO_URI` de Atlas y `CLIENT_URL` = `https://medical.criveradev.cl` (paso 4 y 5).
-`SENTRY_DSN` y `REDIS_*` son opcionales. Tras el primer deploy, **siembra los datos**
+`SENTRY_DSN` y `REDIS_*` son opcionales; si defines `SENTRY_DSN`, comprueba que el DSN
+corresponda al **proyecto de Sentry que estás mirando** (cada proyecto tiene su propio DSN)
+y que el servidor arranque **sin** el aviso `⚠️ SENTRY_DSN no está definido`. Tras el primer deploy, **siembra los datos**
 (roles y admin). El plan gratuito de Render no incluye *Shell*, así que usa una de
 estas dos vías:
 

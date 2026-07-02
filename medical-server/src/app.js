@@ -109,13 +109,6 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// ── Prueba de Sentry (TEMPORAL) ───────────────────────────────
-// Lanza un error a propósito para verificar que Sentry recibe eventos.
-// Elimínalo una vez confirmado que los errores llegan al dashboard.
-app.get('/debug-sentry', () => {
-  throw new Error('Prueba Sentry ✔ — si ves esto en tu dashboard, funciona');
-});
-
 // ── Documentación Swagger ─────────────────────────────────────
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customSiteTitle: 'Medical API Docs'

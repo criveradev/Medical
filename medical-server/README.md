@@ -91,7 +91,7 @@ JWT, control de acceso por rol (RBAC) y autorización a nivel de objeto.
 ```
 medical-server/
 ├── server.js                   # Punto de entrada (HTTP + Socket.io + MongoDB)
-├── instrument.js               # Inicialización de Sentry (carga primero)
+├── instrument.js               # Sentry + dotenv — DEBE cargarse primero (antes de http/express/mongoose)
 ├── Dockerfile                  # Imagen del backend (node:20-alpine)
 ├── docker-compose.yml          # backend + mongo + redis
 ├── src/
@@ -252,7 +252,7 @@ SENTRY_DSN=https://...
 
 > **Requeridas** (bloquean el arranque si faltan): `MONGO_URI`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `JWT_EXPIRES`, `CLIENT_URL`, `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASS`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`.
 >
-> **Opcionales:** `SENTRY_DSN` (sin él, Sentry queda inactivo), `REDIS_URL`/`REDIS_*` (sin Redis, el caché degrada a MongoDB), `EMAIL_FROM` y `BREVO_API_KEY` (envío por API HTTP en hosts con SMTP bloqueado).
+> **Opcionales:** `SENTRY_DSN` (sin él, Sentry queda inactivo y el arranque lo avisa con `⚠️ SENTRY_DSN no está definido`), `REDIS_URL`/`REDIS_*` (sin Redis, el caché degrada a MongoDB), `EMAIL_FROM` y `BREVO_API_KEY` (envío por API HTTP en hosts con SMTP bloqueado).
 >
 > **Opcionales** para ajustar el rate limiting (útiles en desarrollo tras el proxy): `RATE_LIMIT_MAX` (límite general/15 min) y `LOGIN_RATE_MAX` (intentos de login/15 min). Sin definirlas, valen 100/5 en producción y 1000/100 en desarrollo. En el `docker-compose.yml` vienen holgadas para dev.
 
@@ -558,6 +558,8 @@ Al eliminar un resultado, el archivo se borra automáticamente de Cloudinary.
 
 - **Errores centralizados** (`middleware/errores.js`): traduce errores de Mongoose (`ValidationError`, `CastError`, duplicado `11000`), JWT (inválido/expirado) y CORS a respuestas JSON con el código HTTP correcto, y los reporta a Sentry.
 - **Logs** con Winston: `logs/error.log` (solo errores), `logs/combined.log` (todo) y consola con colores. Las peticiones HTTP se registran con Morgan integrado a Winston.
+
+> **⚠️ Orden de inicialización de Sentry.** `instrument.js` (que carga `dotenv` e inicializa Sentry) debe ejecutarse **antes** que cualquier otra librería. Por eso `server.js` lo importa en su **primera línea** (`require('./instrument')`), antes de `http`, `socket.io` y `mongoose`. Si se carga tarde, la auto-instrumentación de Sentry v10 no queda registrada y **no se capturan los errores**. En `NODE_ENV=test` la inicialización se omite a propósito.
 
 ---
 
