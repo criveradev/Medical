@@ -2,9 +2,8 @@
 
 # 🏥 Medical
 
-**Sistema de gestión de citas médicas — Stack MERN + tiempo real**
-
-Plataforma full-stack para una clínica: agenda de citas en línea, portal por rol
+**Sistema de gestión de citas médicas**
+Aplicacion web para agendar citas medicas en línea, portal por rol
 (administración, recepción, doctor y paciente), historial clínico, resultados de
 exámenes, pagos con comprobante y notificaciones en tiempo real.
 
