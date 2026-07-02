@@ -22,7 +22,7 @@ exámenes, pagos con comprobante y notificaciones en tiempo real.
 <br/>
 
 🔗 **[Ver demo en vivo](https://medical.criveradev.cl/)** &nbsp;·&nbsp;
-📡 **[API](https://api.medical.criveradev.cl/health)** &nbsp;·&nbsp;
+📡 **[API en producción](https://api.medical.criveradev.cl/health)** &nbsp;·&nbsp;
 📖 **[Documentación Swagger](https://api.medical.criveradev.cl/api/docs/)** &nbsp;·&nbsp;
 🐛 **[Reportar bug](https://github.com/criveradev/Medical/issues)**
 
