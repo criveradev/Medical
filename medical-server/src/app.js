@@ -3,11 +3,9 @@
 // Middlewares de seguridad, CORS, rutas y manejo de errores
 // ═══════════════════════════════════════════════════════════════
 
-// Sentry solo se inicializa fuera del entorno de test
-// para no interferir con Jest ni contaminar los reportes de errores
-if (process.env.NODE_ENV !== 'test') {
-  require('../instrument');
-}
+// NOTA: Sentry se inicializa en el entry point (server.js → ./instrument),
+// que debe cargarse antes que cualquier otra librería para que la
+// auto-instrumentación de Sentry v10 funcione. No inicializar aquí.
 
 const express = require('express');
 const cors = require('cors');
@@ -109,6 +107,13 @@ app.get('/', (req, res) => {
 // Endpoint simple para verificar que el servicio está vivo (deploys, uptime).
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ── Prueba de Sentry (TEMPORAL) ───────────────────────────────
+// Lanza un error a propósito para verificar que Sentry recibe eventos.
+// Elimínalo una vez confirmado que los errores llegan al dashboard.
+app.get('/debug-sentry', () => {
+  throw new Error('Prueba Sentry ✔ — si ves esto en tu dashboard, funciona');
 });
 
 // ── Documentación Swagger ─────────────────────────────────────

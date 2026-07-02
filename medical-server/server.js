@@ -12,9 +12,10 @@
 //   7. Escuchar en el puerto configurado
 // ═══════════════════════════════════════════════════════════════
 
-// Las variables de entorno deben cargarse antes de cualquier require
-// que las necesite (cloudinary, sentry, mongoose, etc.)
-require('dotenv').config();
+// ⚠️ DEBE ir PRIMERO: inicializa Sentry (y carga dotenv) antes que
+// http, express, mongoose y socket.io, para que la auto-instrumentación
+// de Sentry v10 quede registrada y capture los errores.
+require('./instrument');
 
 const http               = require('http');
 const { Server }         = require('socket.io');
